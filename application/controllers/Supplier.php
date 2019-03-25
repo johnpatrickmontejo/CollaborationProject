@@ -1,11 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class App extends CI_Controller {
+class Supplier extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model('Useraccount', 'user');
+		$this->load->model('Supplieraccount', 'supplier');
 	}
 
 	public function index(){
@@ -18,35 +18,11 @@ class App extends CI_Controller {
 
 	public function register(){
 		$data['pagename'] = 'Register';
-		$data['contents'] = 'registration';	
+		$data['contents'] = 'supplier_registration';	
 		$this->load->view('templates/headerlogin');	
 		$this->load->view('templates/main', $data);
 	}
 
-
-	public function login(){
-		$data = $this->input->post();
-		$result = $this->user->check_account($data);
-
-		if(count($result) && $result[0]->accesslevel == 1){
-			$this->setSession($result);			
-			redirect('dashboard');
-		}else if(count($result) && $result[0]->accesslevel == 3){
-			$this->setSession($result);			
-			redirect('Shop');
-		}else{
-			$this->setFlashData(array('alertType' => 'danger'));
-			$this->setFlashData(array('system_msg' => array("Account doesn't Exist!")));
-		}
-
-		redirect('app');
-
-	}
-
-	public function logout(){
-		$this->session->sess_destroy();
-		redirect('app');
-	}
 
 	public function registration(){
 
@@ -57,9 +33,9 @@ class App extends CI_Controller {
 		$this->setFlashData(array('alertType' => 'danger'));
 
 		if(count($result) == 0){
-			if($this->user->create($data)){
+			if($this->supplier->create($data)){
 				$this->setFlashData(array('alertType' => 'success'));
-				$this->setFlashData(array('system_msg' => array("Successfully Registered!")));
+				$this->setFlashData(array('system_msg' => array("Wait for admin approval!")));
 			}else{
 				$this->setFlashData(array('system_msg' => array("Failed to create!")));
 			}
@@ -67,7 +43,7 @@ class App extends CI_Controller {
 			$this->setFlashData(array('system_msg' => $result));
 		}
 		
-		redirect('app/register');
+		redirect('Supplier/register');
 	}
 
 	private function setSession($data){

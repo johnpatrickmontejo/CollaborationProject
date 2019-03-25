@@ -1,10 +1,6 @@
-<!-- <div class="container-fluid">
-	<div style="margin-left:90%;">
-	<h3>Welcome <?= $this->session->userdata('username'); ?></h3>
-	<a href="<?= base_url('app/logout'); ?>">Logout</a>
-	</div> -->
-	<hr>
+<br>
 	Latest Products
+    <tr>
 		<div class="container-fluid">
                 <?php foreach ($latest_products as $latest) { ?>
                     <div class="panel-body well" style=" float:left;padding:20px;margin:10px;background-color:#DCDCDC;">
@@ -17,10 +13,9 @@
                     <?php
                 }
                 ?>
-         </div>
-         <th></th>
-         <div>
- 	<br>
+         </div></tr>
+         <tr>
+         <div></div>
  		All Products
  	<br>	
 		<div class="container-fluid">
@@ -35,8 +30,4 @@
                     <?php
                 }
                 ?>
-            </div>
-
-            </div>	
-</div>
-</div>
+            </div></tr>
