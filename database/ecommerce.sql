@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 22, 2019 at 09:01 PM
+-- Generation Time: Mar 26, 2019 at 12:36 PM
 -- Server version: 10.1.36-MariaDB
--- PHP Version: 7.1.23
+-- PHP Version: 7.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `billing` (
-  `paymentID` int(11) NOT NULL,
+  `billing_id` int(11) NOT NULL,
   `amount` double(20,2) NOT NULL,
   `payment_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `payment_status` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `transactionID` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `payment_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `cus_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -42,9 +42,30 @@ CREATE TABLE `billing` (
 -- Dumping data for table `billing`
 --
 
-INSERT INTO `billing` (`paymentID`, `amount`, `payment_date`, `payment_status`, `transactionID`, `order_id`, `cus_id`) VALUES
-(1, 92999.00, '2019-03-13 05:15:25', 'Pending', '1', 1, 1004),
-(2, 140000.00, '2019-03-13 05:26:30', 'Pending', '2', 2, 1003);
+INSERT INTO `billing` (`billing_id`, `amount`, `payment_date`, `payment_status`, `payment_id`, `order_id`, `cus_id`) VALUES
+(5, 264320.00, '2019-03-24 15:46:53', 'Pending', 1, 11, 1),
+(6, 348318.88, '2019-03-24 16:35:03', 'Paid', 2, 12, 1),
+(7, 54880.00, '2019-03-24 16:36:19', 'Pending', 1, 13, 1),
+(8, 54880.00, '2019-03-25 11:28:36', 'Pending', 1, 14, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `courier`
+--
+
+CREATE TABLE `courier` (
+  `cour_id` int(11) NOT NULL,
+  `cour_name` varchar(255) NOT NULL,
+  `cour_days` int(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `courier`
+--
+
+INSERT INTO `courier` (`cour_id`, `cour_name`, `cour_days`) VALUES
+(1, 'LBC Express', 2);
 
 -- --------------------------------------------------------
 
@@ -54,8 +75,7 @@ INSERT INTO `billing` (`paymentID`, `amount`, `payment_date`, `payment_status`, 
 
 CREATE TABLE `customers` (
   `cus_id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `userid` int(11) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `middle_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
@@ -72,9 +92,9 @@ CREATE TABLE `customers` (
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`cus_id`, `username`, `password`, `first_name`, `middle_name`, `last_name`, `contact_num`, `cus_street`, `cus_city`, `cus_province`, `cus_postal`, `cus_email`, `date_created`) VALUES
-(1003, 'tazyang', '123', 'Jeanette', 'M', 'Alim', 85818664, 'Zone 8', 'CDO', 'Mis Or', '9000', 'tazeetwenieyt@gmail.com', '2019-03-02 02:27:51'),
-(1004, 'bugz', '123', 'Florence', 'Go', 'Caballero', 8581865, 'XHeights', 'CDO', 'Mis Or', '9000', 'florence@gmail.com', '2019-03-20 18:00:02');
+INSERT INTO `customers` (`cus_id`, `userid`, `first_name`, `middle_name`, `last_name`, `contact_num`, `cus_street`, `cus_city`, `cus_province`, `cus_postal`, `cus_email`, `date_created`) VALUES
+(1, 1, 'marvin', 'uy', 'benigra', 132465, 'bellvuew', 'cagayan de oro', 'misamis oriental', '9000', 'marvinjohnuy@gmail.com', NULL),
+(3, 4, 'erniel', 'batiancila', 'pilapil', 2147483647, 'puntod', 'cdo', 'misor', '9000', 'erniel@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -105,18 +125,21 @@ INSERT INTO `delivery` (`delivery_id`, `delivery_date`, `delivery_status`, `orde
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `cus_id` int(11) NOT NULL,
+  `cour_id` int(11) NOT NULL,
   `orderDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `shippedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `isDeliver` enum('yes','no','','') NOT NULL
+  `isDeliver` enum('yes','no','','') NOT NULL DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `cus_id`, `orderDate`, `shippedDate`, `isDeliver`) VALUES
-(1, 1003, '2019-03-13 14:11:39', '2019-03-13 14:11:39', 'no'),
-(2, 1004, '2019-03-13 14:12:16', '2019-03-13 14:12:16', 'no');
+INSERT INTO `orders` (`order_id`, `cus_id`, `cour_id`, `orderDate`, `shippedDate`, `isDeliver`) VALUES
+(11, 1, 1, '2019-03-24 15:46:53', '2019-03-24 15:46:53', 'no'),
+(12, 1, 1, '2019-03-24 16:35:03', '2019-03-24 16:35:03', 'no'),
+(13, 1, 1, '2019-03-24 16:36:19', '2019-03-24 16:36:19', 'no'),
+(14, 1, 1, '2019-03-25 11:28:35', '2019-03-25 11:28:35', 'no');
 
 -- --------------------------------------------------------
 
@@ -135,8 +158,52 @@ CREATE TABLE `order_details` (
 --
 
 INSERT INTO `order_details` (`order_id`, `product_id`, `quantity`) VALUES
-(1, 13, 2),
-(2, 14, 1);
+(5, 15, 1),
+(5, 13, 1),
+(5, 16, 3),
+(6, 15, 1),
+(6, 13, 1),
+(6, 16, 3),
+(7, 15, 1),
+(7, 13, 1),
+(7, 16, 3),
+(8, 15, 1),
+(8, 13, 1),
+(8, 16, 3),
+(9, 15, 1),
+(9, 13, 1),
+(9, 16, 3),
+(10, 15, 1),
+(10, 13, 1),
+(10, 16, 3),
+(11, 15, 1),
+(11, 13, 1),
+(11, 16, 3),
+(12, 16, 2),
+(12, 13, 2),
+(12, 14, 1),
+(13, 15, 1),
+(14, 15, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment`
+--
+
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL,
+  `payment_name` varchar(255) NOT NULL,
+  `actions` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`payment_id`, `payment_name`, `actions`) VALUES
+(1, 'Cash On Delivery', 'Pending'),
+(2, 'PayPal', 'Paid');
 
 -- --------------------------------------------------------
 
@@ -216,20 +283,26 @@ INSERT INTO `stock` (`stock_id`, `product_id`, `supplier_id`, `quantity`) VALUES
 
 CREATE TABLE `supplier` (
   `supplier_id` int(11) NOT NULL,
-  `supplier_name` varchar(100) NOT NULL,
-  `contact_number` varchar(100) NOT NULL,
-  `supplier_address` varchar(255) NOT NULL,
-  `supplier_phone` varchar(30) NOT NULL,
-  `supplier_email` varchar(30) NOT NULL
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `contact_number` int(11) NOT NULL,
+  `supplier_companyname` varchar(255) NOT NULL,
+  `supplier_street` varchar(255) NOT NULL,
+  `supplier_city` varchar(255) NOT NULL,
+  `supplier_province` varchar(255) NOT NULL,
+  `supplier_postal` varchar(255) NOT NULL,
+  `supplier_email` varchar(255) NOT NULL,
+  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `supplier`
 --
 
-INSERT INTO `supplier` (`supplier_id`, `supplier_name`, `contact_number`, `supplier_address`, `supplier_phone`, `supplier_email`) VALUES
-(1, 'Walmart', '87000', 'Oregon,USA', '088-642-432', 'walmart@ask.us'),
-(2, 'AJAX & JSON INC', '0974248192', 'Gusa,CDO', '90299', 'Ajxson@gmail.com');
+INSERT INTO `supplier` (`supplier_id`, `username`, `password`, `contact_number`, `supplier_companyname`, `supplier_street`, `supplier_city`, `supplier_province`, `supplier_postal`, `supplier_email`, `date_created`) VALUES
+(1, '', '', 0, '0', '', '', '', '0', 'walmart@ask.us', '2019-03-25 14:15:14'),
+(2, '', '', 0, '0', '', '', '', '0', 'Ajxson@gmail.com', '2019-03-25 14:15:14'),
+(3, 'erniel', 'pilapil', 123456, 'dnslfkns', 'weqpwje', 'sdfnjldskfn', 'ksnfdls', 'lsdnfsdnm', 'erniel@gmail.com', '2019-03-25 17:35:19');
 
 -- --------------------------------------------------------
 
@@ -257,7 +330,7 @@ INSERT INTO `supplier_transaction` (`sup_transactionID`, `supplier_id`, `product
 --
 
 CREATE TABLE `useraccounts` (
-  `userid` int(11) UNSIGNED NOT NULL,
+  `userid` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(32) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '1',
@@ -269,7 +342,11 @@ CREATE TABLE `useraccounts` (
 --
 
 INSERT INTO `useraccounts` (`userid`, `username`, `password`, `status`, `accesslevel`) VALUES
-(1, 'marvin', 'benigra', 1, 3);
+(1, 'marvin', 'benigra', 1, 3),
+(3, 'john', 'marvin', 1, 1),
+(4, 'erniel', 'qweqwe', 1, 3),
+(6, 'er1', '111111', 1, 3),
+(7, 'erniel', 'pilapil', 1, 3);
 
 --
 -- Indexes for dumped tables
@@ -279,15 +356,23 @@ INSERT INTO `useraccounts` (`userid`, `username`, `password`, `status`, `accessl
 -- Indexes for table `billing`
 --
 ALTER TABLE `billing`
-  ADD PRIMARY KEY (`paymentID`),
-  ADD KEY `cus_id` (`cus_id`);
+  ADD PRIMARY KEY (`billing_id`),
+  ADD KEY `cus_id` (`cus_id`),
+  ADD KEY `payment_id` (`payment_id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `courier`
+--
+ALTER TABLE `courier`
+  ADD PRIMARY KEY (`cour_id`);
 
 --
 -- Indexes for table `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`cus_id`),
-  ADD UNIQUE KEY `unique` (`middle_name`);
+  ADD KEY `userid` (`userid`);
 
 --
 -- Indexes for table `delivery`
@@ -301,14 +386,21 @@ ALTER TABLE `delivery`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
-  ADD KEY `cus_id` (`cus_id`);
+  ADD KEY `cus_id` (`cus_id`),
+  ADD KEY `cour_id` (`cour_id`);
 
 --
 -- Indexes for table `order_details`
 --
 ALTER TABLE `order_details`
-  ADD PRIMARY KEY (`order_id`),
-  ADD KEY `product_id` (`product_id`);
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`payment_id`);
 
 --
 -- Indexes for table `products`
@@ -359,13 +451,19 @@ ALTER TABLE `useraccounts`
 -- AUTO_INCREMENT for table `billing`
 --
 ALTER TABLE `billing`
-  MODIFY `paymentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `billing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `courier`
+--
+ALTER TABLE `courier`
+  MODIFY `cour_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `cus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1005;
+  MODIFY `cus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `delivery`
@@ -377,7 +475,13 @@ ALTER TABLE `delivery`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `payment`
+--
+ALTER TABLE `payment`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -395,7 +499,7 @@ ALTER TABLE `stock`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `supplier_transaction`
@@ -407,7 +511,7 @@ ALTER TABLE `supplier_transaction`
 -- AUTO_INCREMENT for table `useraccounts`
 --
 ALTER TABLE `useraccounts`
-  MODIFY `userid` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
@@ -417,7 +521,15 @@ ALTER TABLE `useraccounts`
 -- Constraints for table `billing`
 --
 ALTER TABLE `billing`
-  ADD CONSTRAINT `billing_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customers` (`cus_id`);
+  ADD CONSTRAINT `billing_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customers` (`cus_id`),
+  ADD CONSTRAINT `billing_ibfk_2` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`),
+  ADD CONSTRAINT `billing_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
+
+--
+-- Constraints for table `customers`
+--
+ALTER TABLE `customers`
+  ADD CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `useraccounts` (`userid`);
 
 --
 -- Constraints for table `delivery`
@@ -429,13 +541,15 @@ ALTER TABLE `delivery`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customers` (`cus_id`);
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customers` (`cus_id`),
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`cour_id`) REFERENCES `courier` (`cour_id`);
 
 --
 -- Constraints for table `order_details`
 --
 ALTER TABLE `order_details`
-  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
+  ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
+  ADD CONSTRAINT `order_details_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
 
 --
 -- Constraints for table `products`
@@ -454,8 +568,8 @@ ALTER TABLE `stock`
 -- Constraints for table `supplier_transaction`
 --
 ALTER TABLE `supplier_transaction`
-  ADD CONSTRAINT `supplier_transaction_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`),
-  ADD CONSTRAINT `supplier_transaction_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
+  ADD CONSTRAINT `supplier_transaction_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
+  ADD CONSTRAINT `supplier_transaction_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
